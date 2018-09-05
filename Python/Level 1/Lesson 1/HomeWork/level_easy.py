@@ -1,16 +1,16 @@
 # Задача-1: поработайте с переменными, создайте несколько,
 # выведите на экран, запросите от пользователя и сохраните в переменную, выведите на экран
 
-# first_var = 'Моя первая переменная Pyton'  # first variable type str
-# second_var = 2  # second variable type int
-# third_var = True  # third variable type bool
-#
-# print('\nfirst_var = ', first_var, ' Type = ', type(first_var))
-# print('\nfirst_var = ', second_var, ' Type = ', type(second_var))
-# print('\nfirst_var = ', third_var, ' Type = ', type(third_var))
-#
-# first_input = input('\nВведите любые сиволы ')
-# print('\nВы ввели ',first_input, '\nТип данных', type(first_input))
+first_var = 'Моя первая переменная Pyton'  # first variable type str
+second_var = 2  # second variable type int
+third_var = True  # third variable type bool
+
+print('\nfirst_var = ', first_var, ' Type = ', type(first_var))
+print('\nfirst_var = ', second_var, ' Type = ', type(second_var))
+print('\nfirst_var = ', third_var, ' Type = ', type(third_var))
+
+first_input = input('\nВведите любые сиволы ')
+print('\nВы ввели ',first_input, '\nТип данных', type(first_input))
 
 # Задача-2: Запросите от пользователя число, сохраните в переменную,
 # прибавьте к числу 2 и выведите результат на экран.
