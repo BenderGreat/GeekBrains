@@ -6,7 +6,7 @@
 
 number = int(input('Введите число n '))
 
-while number >= 10 or number <= 0:
+while number > 10 or number < 1:
     print('Вы ввели число n = ', number, ' не попадающее в необходимый диапазон')
     print('Необходимый диапазон чисел  0 < n < 10 ')
     number = int(input('Введите число n еще раз '))
