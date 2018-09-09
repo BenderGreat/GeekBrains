@@ -25,7 +25,7 @@ print('\nВы ввели ', first_input, '\nПрибавим к введенно
 
 input_age = int(input('\nВведите ваш возраст '))
 
-if input_age > 18:
+if input_age > 17:
     print('Доступ разрешен ')
 else:
     print('Извините, пользование данным ресурсом только с 18 лет ')
