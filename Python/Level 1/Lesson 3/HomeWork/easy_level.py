@@ -38,11 +38,16 @@ get_max_number(list_num_in_word['first'], list_num_in_word['second'], list_num_i
 # Создайте функцию, принимающую неограниченное количество строковых аргументов,
 # верните самую длинную строку из полученных аргументов
 
-def get_max_string(*list_strings):
-    max_string = max(*list_strings, key=len)
-    print(f'Самая длинная строка: {max_string}')
+# def get_max_string(*list_strings):
+#     max_string = max(*list_strings, key=len)
+#     print(f'Самая длинная строка: {max_string}')
 
+# max_string = lambda *list_strings: max(*list_strings, key=len)
 
-list_string = ['dfsdf', 'dfsd dfsd78', '897idjhsuyyu', '76yhgrbvy5']
+list_strings = ['dfsdf', 'dfsd dfsd78', '897idjhsuyyu', '76yhgrbvy5']
 
-get_max_string(list_string)
+max_string = lambda *list_args: max(*list_args, key=len)
+
+print(f'Самая длинная строка: {max_string(list_strings)}')
+
+# get_max_string(list_string)
