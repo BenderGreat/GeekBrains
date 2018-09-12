@@ -1,0 +1,4 @@
+Dmitry - 7000
+Ivan - 30000
+Peter - 400000
+Donald - 1
