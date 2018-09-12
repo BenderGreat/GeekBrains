@@ -16,19 +16,18 @@ __author__ = 'Perfiliev Dmitry'
 # Подсказка: воспользоваться методом .format()
 
 fruits_list = ['mangosteen', 'apple', 'orange', 'lychee', 'banana']
+right_offset = len(max(fruits_list, key=len))
 
 print("\nИспользуем f для вывода в print: \n")
 
-n = 0
-while n < len(fruits_list):
-    print(f"{n + 1}. {fruits_list[n].title()}")
-    n += 1
+for index, fruit in enumerate(fruits_list, start=0):
+    print(f"{index}. {fruit.title().rjust(right_offset)}")
 
 print("\nИспользуем .format() для вывода в print: \n")
 
 n = 0
 for fruit in fruits_list:
-    print("{}. {}".format(n + 1, fruit.title()))
+    print("{}. {}".format(n + 1, fruit.title().rjust(right_offset)))
     n += 1
 
 # Задача-2:

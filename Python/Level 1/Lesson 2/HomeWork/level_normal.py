@@ -17,9 +17,9 @@ for number in int_numbers_list:
     if abs(number) != number:
         continue
 
-    number_square = number ** .5
+    number_square = number ** 0.5
     if number_square.is_integer():
-        new_number_list.append(int(number ** .5))
+        new_number_list.append(int(number ** 0.5))
 
 print(f'Список чисел извлекаемых без остатка:\n{new_number_list}')
 
