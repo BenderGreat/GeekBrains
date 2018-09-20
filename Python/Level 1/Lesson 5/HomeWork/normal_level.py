@@ -13,28 +13,19 @@
 # Для решения данной задачи используйте алгоритмы из задания easy,
 # оформленные в виде соответствующих функций,
 # и импортированные в данный файл из easy.py
+import easy
 
 print('\nЗадача №1')
 
-import os
-import sys
-import easy
-
-
-def show_current_dir(path):
-    if not path:
-        path = os.getcwd()
-    current_dir = os.path.basename(path)
-    print(f'\nТекущая директория: {current_dir}')
-
 
 def get_interface_action():
+    # Создание меню сервиса
     try:
         return int(input("\nВыбирите действие:\n"
                          "1. Перейти в папку\n"
                          "2. Просмотреть содержимое текущей папки\n"
-                         # "3. Удалить папку\n"
-                         # "4. Создать папку\n"
+                         "3. Удалить папку\n"
+                         "4. Создать папку\n"
                          "0. Выход\n"
                          ">>> "))
     except ValueError:
@@ -46,38 +37,41 @@ def get_interface_action():
 
 
 def choose_dir():
+    # Пункт меню Перейти в папку
     dir_name = input('Введите имя дериктории:\n'
                      '>>>')
-    if os.path.isdir(dir_name):
-        print(f'\nУспешно перешли в каталог {dir_name}')
-        return dir_name
-    else:
-        print(f'Директории с именем {dir_name} не существует')
+    easy.change_current_dir(dir_name)
 
 
-def run_feature(current_path):
+def create_dir():
+    # Пункт меню Создать папку
+    name = input('Введите имя новой папки:\n>>> ')
+    easy.create_new_dir(name)
+
+
+def delete_dir():
+    # Пункт меню Удалить папку
+    name = input('Введите имя папки которую необходимо удалить:\n>>> ')
+    easy.delete_dir(name)
+
+
+def run_feature():
+    # Алгоритм сервиса
     while True:
-        show_current_dir(current_path)
+        easy.show_current_dir()
         action = get_interface_action()
 
         if action == 0:
             print('\nBye)))')
             break
-
-        if action == 1:
-            new_dir = choose_dir()
-            if new_dir:
-                current_path = new_dir
+        elif action == 1:
+            choose_dir()
         elif action == 2:
-            easy.show_dir_contents(current_path)
-        # elif action == 3:
-        #     easy.delete_dir()
-        # elif action == 4:
-        #     easy.create_dir()
-
-        if current_path == os.path.basename(start_path):
-            current_path = start_path
+            easy.show_dir_contents()
+        elif action == 3:
+            delete_dir()
+        elif action == 4:
+            create_dir()
 
 
-start_path = os.getcwd()
-run_feature(start_path)
+run_feature()
