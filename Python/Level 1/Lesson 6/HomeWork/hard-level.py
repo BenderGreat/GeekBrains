@@ -10,7 +10,6 @@
 
 
 class ToyFactory:
-    __dict_class_type = {'wolf': 'Wolf', 'sun': 'Sun'}
 
     def __init__(self, name, color, type_toy):
         self.name = name
@@ -30,7 +29,18 @@ class ToyFactory:
         self.buy_materials()
         self.sew_toy()
         self.paint_toy()
-        return Toys(self.name, self.color, self.type_toy).view_toy()
+        if self.type_toy == 'wolf':
+            self.make_wolf()
+        elif self.type_toy == 'sun':
+            self.make_sun()
+        else:
+            return Toys(self.name, self.color, self.type_toy).view_toy()
+
+    def make_wolf(self):
+        return Wolf(self.name, self.color).view_toy()
+
+    def make_sun(self):
+        return Sun(self.name, self.color).view_toy()
 
 
 class Toys:
@@ -41,7 +51,7 @@ class Toys:
         self.type_toy = type_toy
 
     def view_toy(self):
-        print(f'Название {self.name}, Цвет {self.color}, Тип {self.type_toy}')
+        print(f'Название: "{self.name}", Цвет: "{self.color}", Тип: "{self.type_toy}"')
 
 
 # Задача - 2
@@ -61,3 +71,7 @@ class Sun(Toys):
 
     def __init__(self, name, color):
         Toys.__init__(self, name, color, self.__type_toy)
+
+
+
+ToyFactory('Игрушка', 'Red', 'wolf').make_toy()
