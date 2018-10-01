@@ -48,51 +48,73 @@
 import random
 
 
+# Базовый класс игрока
 class Player:
 
     def __init__(self, name):
         self.name = name
         self.card = self.create_player_card()
+        self.list_card_num = self.card.player_card[0] + self.card.player_card[1] + self.card.player_card[2]
 
+    # Создание карты игрока
     def create_player_card(self):
         return Card(self.name)
 
+    # Отображение карты игрока
     def show_card(self):
         self.card.show_player_card()
 
-    def compare_barrel_whith_card(self, barrel):
-        list_card_num = self.card.player_card[0] + self.card.player_card[1] + self.card.player_card[2]
-        # print(f'{list_card_num}')
-        if list_card_num.count(barrel) > 0:
-            print(f'Есть такая цифра : {barrel}\n'
-                  f'У игрока: {self.name}')
-            self.close_cell_player_card(barrel)
+    # Поиск числа в карте игрока
+    def compare_barrel_whith_card(self, barrel, show=False):
+        if self.list_card_num.count(barrel) > 0:
+            if show:
+                print(f'\nУ игрока: {self.name}\n'
+                      f'В карте присутствует число: {barrel}')
+            return True
         else:
-            print(f'Нет такой цифры: {barrel}\n'
-                  f'У игрока: {self.name}')
+            if show:
+                print(f'\nУ игрока: {self.name}\n'
+                      f'В карте нет числа: {barrel}')
+            return False
 
+    # Удаление числа из карты игрока (Вычеркивание)
     def close_cell_player_card(self, barrel):
         for indx, item in enumerate(self.card.player_card):
             if item.count(barrel):
                 index = item.index(barrel)
                 if index >= 0:
                     self.card.player_card[indx][index] = '-'
-                    self.card.show_player_card()
+                    # self.card.show_player_card()
                     break
 
+    # Подсчет количества зачеркнутых позицый в карточке игрока
     def get_close_cell(self):
-        list_card_num = self.card.player_card[0] + self.card.player_card[1] + self.card.player_card[2]
-        return list_card_num.count('-')
+        return self.list_card_num.count('-')
 
+
+# Дочерний класс игрока (Пользователь)
 class PlayerUser(Player):
+
     def __init__(self, name='User'):
         super().__init__(name)
 
 
+# Дочерний класс игрока (Компьютер)
 class PlayerComputer(Player):
+
     def __init__(self, name='Computer'):
         super().__init__(name)
 
+
+# Класс для работы с картой игрока
+# При создании карты игрока использовались следующие условия:
+# - все числа уникальные
+# - в одном столбце не должно быть более 2 чисел
+# - интервалы чисел по столбцам ( 1 : [1:9],  9: [80:90] для всех остальных по формуле n : [n*10: n*10+9])
+# - недолжно быть пустых столбцов!!! Если это условие не использовать то можно реализовать более простой метод формирования карточек.
+# Алгоритм формирования карточки след:
+# 1. Созданее матрицы карты со занчениями 0 и 1
+# 2. Заполнение ячеек с 1 случайными числами из соответствующего интервала
 
 class Card:
 
@@ -100,12 +122,14 @@ class Card:
         self.name_player = name_player
         self.player_card = self.create_player_card()
 
+    # Формирование карты игрока
     def create_player_card(self):
         matrix_card = self.create_matrix_card()
         player_card = self.fill_matrix(matrix_card)
-        # self.show_player_card()
         return player_card
 
+    # Запонение матрицы карты случайными числами
+    # Заполняем ячейки числами из указанного интервала для данной ячейки карточки
     def fill_matrix(self, matrix_card):
         list_barrels = []
         player_card = []
@@ -125,6 +149,7 @@ class Card:
             player_card.append(card_line)
         return player_card
 
+    # Отображение карты игрока
     def show_player_card(self):
         print(f'\n------ Карта игрока: {self.name_player} - ----')
         for line in self.player_card:
@@ -132,6 +157,8 @@ class Card:
             print(f'{string}')
         print(f'------ Карта игрока: {self.name_player} - ----\n')
 
+    # Получение интервалов для столбцов карты
+    # Необходимы для заполнения матрицы слчайными числами
     def get_interval(self, num_interval):
         interval = [num for num in range(num_interval * 10 - 10, num_interval * 10)]
         if num_interval == 1:
@@ -140,79 +167,114 @@ class Card:
             interval.append(90)
         return interval
 
+    # Создание строки с произвольным количеством 1 - one и 0 - zero
     def get_random_list(self, one, zero):
         line = [0 for _ in range(1, 5 - zero)] + [1 for _ in range(1, 6 - one)]
         return random.sample(line, len(line))
 
+    # Формирование матрицы для карты пользователя (произваольное расположение 0 и 1 уазывающих на размещение чисел на карте)
     def create_matrix_card(self):
         matrix_card = []
+
+        # Создаем матрицу с 2 столбцами
         for num_line in range(1, 3):
             matrix_card.append(self.create_matrix_line())
 
+        # Формируе третий столбец матрици исходя из предыдущих строк
+        # Складываем 1 и 2 строку
         third_line = [sum(list(cell)) for cell in zip(matrix_card[0], matrix_card[1])]
 
+        # Формируем строку со случайным расположением 1 и 0
         number_of_one = third_line.count(0)
         number_of_zero = third_line.count(2)
         random_third_line = self.get_random_list(number_of_one, number_of_zero)
         new_third_line = []
 
+        # Формируем конечную строку
         for x in third_line:
             if x == 0:
-                new_third_line.append(1)
+                new_third_line.append(1)  # Заменяем 0 на единицу для того чтобы небыло пустых столюцов в карточке
             if x == 2:
-                new_third_line.append(0)
+                new_third_line.append(0)  # Заменяем 2 на 0 для тго чтобы небыло трех чисел в одном столбце
             if x == 1:
-                new_third_line.append(random_third_line.pop())
+                new_third_line.append(random_third_line.pop())  # Заменяем значения в ячейках на случайные значения
 
         third_line = new_third_line
         matrix_card.append(third_line)
-
         return matrix_card
 
+    # Формируем строку матрицы карты из 5 единиц и 4 нулей
+    # Далее перемешиваем их в случайном порядке
     def create_matrix_line(self):
         random_line = [0 for _ in range(1, 5)] + [1 for _ in range(1, 6)]
         random_line = random.sample(random_line, len(random_line))
         return random_line
 
 
+# Класс игрового процесса
 class Game:
 
     def __init__(self):
+        self.create_players()
         self.list_barrels = [barrel for barrel in range(1, 91)]
 
+    # Получение случайного боченка с числом
     def get_random_barrel(self):
         barrel = random.choice(self.list_barrels)
         self.list_barrels.remove(barrel)
         return barrel
 
+    # Создание игроков
     def create_players(self):
         self.user = PlayerUser()
         self.computer = PlayerComputer()
 
+    # Оновоной алгоритм игры
     def start_game(self):
-        self.create_players()
         new_game = 1
         while new_game > 0:
+            print('\n------------------------- Новый раунд!!! ----------------------------------')
             self.show_players_card()
             rnd_barrel = self.get_random_barrel()
             print(f'Случайная бочка под номером: {rnd_barrel}')
-            self.user.compare_barrel_whith_card(rnd_barrel)
-            self.computer.compare_barrel_whith_card(rnd_barrel)
-            # print(f'{self.list_barrels}')
-            if self.user.get_close_cell() > 14:
-                print(f'Конец игры !!! Выиграл {self.user.name}')
+
+            user_ans = input('Вычеркнуть число Y/N?  >>>> ')
+
+            if not self.user.compare_barrel_whith_card(rnd_barrel, True) and user_ans == 'Y':
+                print('Вы проиграли т.к. на карточке нет такого числа')
                 new_game = 0
-            elif  self.computer.get_close_cell() > 14:
-                print(f'Конец игры !!! Выиграл {self.computer.name}')
+            elif self.user.compare_barrel_whith_card(rnd_barrel) and user_ans != 'Y':
+                print('Вы проиграли т.к. не зачеркнули число в карточке')
                 new_game = 0
+            elif self.user.compare_barrel_whith_card(rnd_barrel) and user_ans == 'Y':
+                self.user.close_cell_player_card(rnd_barrel)
+
+            if new_game != 0:
+                if self.computer.compare_barrel_whith_card(rnd_barrel, True):
+                    self.computer.close_cell_player_card(rnd_barrel)
+
+                num_close_cell_user = self.user.get_close_cell()
+                num_close_cell_computer = self.computer.get_close_cell()
+
+                if num_close_cell_user > 14:
+                    print(f'Конец игры !!! Выиграл {self.user.name}')
+                    new_game = 0
+                elif num_close_cell_computer > 14:
+                    print(f'Конец игры !!! Выиграл {self.computer.name}')
+                    new_game = 0
+                elif num_close_cell_user > 14 and num_close_cell_computer > 14:
+                    print(f'Конец игры !!! Ничья.')
+                    new_game = 0
+
             if new_game == 0:
-                start_new_game = str(input('Еще один раунд Y/N?'))
+                start_new_game = str(input('\nНачать игру заново Y/N? >>>> '))
                 if start_new_game == 'Y':
                     self.__init__()
-                    self.start_game()
+                    new_game = 1
 
+        print('\nBye))))))')
 
-
+    # Отображение карточек игроков
     def show_players_card(self):
         self.user.show_card()
         self.computer.show_card()
